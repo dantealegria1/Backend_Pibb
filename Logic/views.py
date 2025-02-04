@@ -23,6 +23,48 @@ databases = Databases(client)
 # Database & Collection IDs from .env
 DATABASE_ID = os.getenv("APPWRITE_DATABASE_ID")
 COLLECTION_ID = os.getenv("APPWRITE_COLLECTION_ID")
+COLLECTION_USERS = os.getenv("APPWRITE_USER_COLLECTION_ID")
+
+def get_user(request):
+    if request.method == 'GET':
+        try:
+            users = databases.list_documents(database_id=DATABASE_ID,collection_id=COLLECTION_USERS)
+            return JsonResponse({'Users': users['documents']}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+@csrf_exempt
+def set_user(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+
+            # Validate required fields
+            username = data.get("username")
+            password = data.get("password")  # Ensure it's a string ID
+            email = data.get("email", None)  # Optional date
+
+            if not username or not password:
+                return JsonResponse({'error': 'Username and password are required'}, status=400)
+
+            # Create the new task in Appwrite
+            new_user = databases.create_document(
+                database_id=DATABASE_ID,
+                collection_id=COLLECTION_ID,
+                document_id=ID.unique(),  # Generate unique ID
+                data={
+                    "username": username,
+                    "password": password,
+                    "email": email
+                }
+            )
+
+            return JsonResponse({'user': new_user}, status=201)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def get_task(request):
     if request.method == 'GET':
@@ -43,8 +85,7 @@ def set_task(request):
             task_name = data.get("name")
             id_user = data.get("id_user")  # Ensure it's a string ID
             due_to = data.get("due_to", None)  # Optional date
-            is_complete = data.get("isComplete", False)  # Default to False
-            description = data.get("description", "")
+            is_complete = data.get("isComplete", False)  # Default to False description = data.get("description", "")
 
             if not task_name or not id_user:
                 return JsonResponse({'error': 'Task name and user ID are required'}, status=400)
