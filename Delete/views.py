@@ -37,7 +37,7 @@ def delete_user(request):
             databases.delete_document(DATABASE_ID, COLLECTION_USERS, id_user)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500) 
-    return JsonResponse({'error': 'Invalid request method'}, status=400)   
+     return JsonResponse({'error': 'Invalid request method'}, status=400)   
 
 @csrf_exempt  # Disable CSRF for simplicity
 def delete_task(request):
@@ -45,7 +45,7 @@ def delete_task(request):
         try:
             data = json.loads(request.body)
             user = data.get('id_task')
-            databases.delete_document(DATABASE_ID, COLLECTION_USERS, id_user)
+            databases.delete_document(DATABASE_ID, COLLECTION_USERS, id_task)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500) 
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+     return JsonResponse({'error': 'Invalid request method'}, status=400)

@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('get/', include('Get.urls')),
     path('set/', include('Set.urls')),
-    path('Delete', include('Delete.urls'))
+    path('delete/', include('Delete.urls'))
 ]
