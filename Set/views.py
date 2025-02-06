@@ -25,15 +25,6 @@ DATABASE_ID = os.getenv("APPWRITE_DATABASE_ID")
 COLLECTION_ID = os.getenv("APPWRITE_COLLECTION_ID")
 COLLECTION_USERS = os.getenv("APPWRITE_USER_COLLECTION_ID")
 
-def get_user(request):
-    if request.method == 'GET':
-        try:
-            users = databases.list_documents(database_id=DATABASE_ID,collection_id=COLLECTION_USERS)
-            return JsonResponse({'Users': users['documents']}, status=200)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
-
 @csrf_exempt
 def set_user(request):
     if request.method == 'POST':
@@ -62,15 +53,6 @@ def set_user(request):
 
             return JsonResponse({'user': new_user}, status=201)
 
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
-
-def get_task(request):
-    if request.method == 'GET':
-        try:
-            todos = databases.list_documents(database_id=DATABASE_ID, collection_id=COLLECTION_ID)
-            return JsonResponse({'tasks': todos['documents']}, status=200)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
@@ -114,5 +96,5 @@ def set_task(request):
             return JsonResponse({'task': new_task}, status=201)
 
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+            return JsonResponse({'error': str(e)}, status=500) 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
