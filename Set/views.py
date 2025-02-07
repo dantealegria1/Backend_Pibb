@@ -42,7 +42,7 @@ def set_user(request):
             # Create the new task in Appwrite
             new_user = databases.create_document(
                 database_id=DATABASE_ID,
-                collection_id=COLLECTION_ID,
+                collection_id=COLLECTION_USERS,
                 document_id=ID.unique(),  # Generate unique ID
                 data={
                     "username": username,
@@ -51,10 +51,10 @@ def set_user(request):
                 }
             )
 
-            return JsonResponse({'user': new_user}, status=201)
+            return JsonResponse({'user': new_user}, status=200)
 
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+            return JsonResponse({'error': str(e),'datos': username+password+email}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 @csrf_exempt  # Disable CSRF for simplicity
